@@ -2,33 +2,6 @@ package Project_1;
 
 import java.util.*;
 
-class customer{
-      private String name;
-      private int age;
-      private String gender;
-      private String address;
-      private String phoneNumber;
-      private String grade;
-      
-      customer(String name, int age, String gender, String address, String phoneNumber, String grade){
-         this.name = name;
-         this.age = age;
-         this.address = address;
-         this.phoneNumber = phoneNumber;
-         this.grade = grade;
-      }
-      
-      customer(){}
-      
-
-	public void customerManu() {
-         System.out.println("1.입력");
-         System.out.println("2.수정");
-         System.out.println("3.삭제");
-         System.out.println("4. 메인 메뉴로 돌아가기");
-      }
-}
-
 public class Shopping {
 	
 	public static void start() {
@@ -38,6 +11,7 @@ public class Shopping {
 	    System.out.println("3. 제품 관리");
 	    System.out.println("어떤 메뉴를 선택하시겠습니까? ");
 	    
+	    // 입력받은 조건에 따라 쇼핑몰, 고객관리, 제품관리로 분기 
 	    Scanner sc = new Scanner(System.in);
 	      int menu = sc.nextInt();
 	      
@@ -45,8 +19,8 @@ public class Shopping {
 	         case 1 : 
 	        	 break;
 	         case 2 : {
-	            customer acustomer = new customer();
-	            acustomer.customerManu();
+	        	 CustomerMain coustormerMain = new CustomerMain();
+	        	 coustormerMain.customerMenu();
 	            break;
 	         }
 	         case 3 : 
@@ -55,13 +29,10 @@ public class Shopping {
 	      }
 	}
 	
-	
-	
    public static void main(String[] args) {
-      
+      // Main class의 start 메소드 호출
 	   start();
-     
-      
+    
    	}
 }
       
