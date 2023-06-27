@@ -2,7 +2,7 @@ package Project_1;
 
 import java.util.*;
 
-public class Shopping {
+public class ShoppingMain {
 	
 	public static void start() {
 		System.out.println("*** 쇼핑몰 프로그램 ***");
