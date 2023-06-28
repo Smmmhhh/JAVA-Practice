@@ -82,6 +82,7 @@ public class CustomerMain{
 			System.out.println("3.삭제");
 			System.out.println("4.조회");
 			System.out.println("5.전체조회");
+			System.out.println("6.종료");
 			System.out.println("0.메인 메뉴로 돌아가기");
 			System.out.println("-----------------------");
 			// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
@@ -104,6 +105,9 @@ public class CustomerMain{
 			case 5:
 				customerService.view(); // 5. 전체 고객 조회
 				break;
+			case 6:
+				customerService.exit(); // 6. 종료
+				break;	
 			case 0:
 				restart.start();	// 0. 초기화면 돌아가기 
 				break;

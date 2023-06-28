@@ -24,6 +24,8 @@ public class ShoppingMain {
 	            break;
 	         }
 	         case 3 : 
+	        	 ProductMain productMain = new ProductMain();
+	        	 productMain.ProductMenu();
 	        	 break;
 	         default : System.out.println("잘못된 입력입니다.");
 	      }
@@ -32,7 +34,7 @@ public class ShoppingMain {
    public static void main(String[] args) {
       // Main class의 start 메소드 호출
 	   start();
-    
+	   
    	}
 }
       

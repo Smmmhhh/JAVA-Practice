@@ -36,8 +36,7 @@ public class CustomerService {
 		}
 		// 주소 입력받기
 		System.out.println("주소를 입력하세요. ");
-		String address = sc.nextLine();
-		sc.nextLine();
+		String address = sc.next();
 		// 휴대폰 번호 입력받기
 		System.out.println("번호를 입력하세요. ");
 		String phonenumber = sc.next();
@@ -49,45 +48,48 @@ public class CustomerService {
 	public void edit() {
 		System.out.println("수정할 고객의 ID를 입력하세요.");
 		String id = sc.next();
-
+		int n = -1;
+		int idNom = 0;
 		for (int i = 0; i < list.size(); i++) {
 			if (id.equals(list.get(i).getId())) {
+				idNom = i;
 				System.out.println("수정하실 항목을 선택하세요.");
 				System.out.println("1.이름 2.나이 3.성별 4.주소 5.번호");
-				int n = sc.nextInt();
-
-				switch (n) {
-				case 1:
-					System.out.println("이름을 새로 입력하세요.");
-					String name = sc.next();
-					list.get(i).setName(name);
-					break;
-				case 2:
-					System.out.println("나이를 새로 입력하세요.");
-					int age = sc.nextInt();
-					list.get(i).setAge(age);
-					break;
-				case 3:
-					System.out.println("성별을 새로 입력하세요.");
-					String gender = sc.next();
-					list.get(i).setGender(gender);
-					break;
-				case 4:
-					System.out.println("주소를 새로 입력하세요.");
-					String address = sc.next();
-					list.get(i).setAddress(address);
-					break;
-				case 5:
-					System.out.println("번호을 새로 입력하세요.");
-					String phonenumber = sc.next();
-					list.get(i).setPhoneNumber(phonenumber);
-					break;
-				}
+				n = sc.nextInt();
+				break;
 			}
-
-			else {
-				System.out.println("잘못된 정보입니다.");
-			}
+		}
+		
+		switch (n) {
+		case -1:
+			System.out.println("잘못된 정보입니다.");
+			break;
+		case 1:
+			System.out.println("이름을 새로 입력하세요.");
+			String name = sc.next();
+			list.get(idNom).setName(name);
+			break;
+		case 2:
+			System.out.println("나이를 새로 입력하세요.");
+			int age = sc.nextInt();
+			list.get(idNom).setAge(age);
+			break;
+		case 3:
+			System.out.println("성별을 새로 입력하세요.");
+			String gender = sc.next();
+			list.get(idNom).setGender(gender);
+			break;
+		case 4:
+			System.out.println("주소를 새로 입력하세요.");
+			String address = sc.next();
+			list.get(idNom).setAddress(address);
+			// sc.nextLine();
+			break;
+		case 5:
+			System.out.println("번호을 새로 입력하세요.");
+			String phonenumber = sc.next();
+			list.get(idNom).setPhoneNumber(phonenumber);
+			break;
 		}
 	}
 
@@ -111,13 +113,7 @@ public class CustomerService {
 	
 	// 개인별 정보 출력
 	public void personalView() {
-		if (list.size() != 0) {
-			for (CustomerMain customer : list) {
-				customer.customerList();
-			}
-		} else if (list.size() == 0) {
-			System.out.println("회원 목록이 없습니다.");
-		}
+		
 
 	}
 
@@ -130,6 +126,22 @@ public class CustomerService {
 		} else if (list.size() == 0) {
 			System.out.println("회원 목록이 없습니다.");
 		}
-
+	}
+	
+	
+	// 종료
+	public void exit() {
+		
+		File file = new File("data.cvs");
+		if(!file.exists()) {
+			System.out.println("파일이 존재하지 않습니다.");
+			System.exit(0);
+		}
+		
+		
+		
+		
+		
+		System.out.println("프로그램이 종료되었습니다.");
 	}
 }
