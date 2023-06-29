@@ -9,6 +9,7 @@ public class CustomerMain{
 	
 	Scanner sc = new Scanner(System.in);
 	private String id;
+	private String pw;
 	private String name;
 	private int age;
 	private String gender;
@@ -20,9 +21,10 @@ public class CustomerMain{
 	 */
 	CustomerMain(){}
       
-	public CustomerMain(String id, String name, int age, String gender, String address, String phoneNumber){
+	public CustomerMain(String id, String pw, String name, int age, String gender, String address, String phoneNumber){
 		super();
 		this.id = id;
+		this.pw = pw;
 		this.name = name;
 		this.age = age;
 		this.gender = gender;
@@ -37,6 +39,8 @@ public class CustomerMain{
 	 */
 	public String getId() {return id;}
 	public void setId(String id) {this.id = id;}
+	public String getPw() {return pw;}
+	public void setPw(String pw) {this.pw = pw;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
 	public int getAge() {return age;}
@@ -58,6 +62,8 @@ public class CustomerMain{
 		sb.append("회원" + " || ");
 		sb.append("id = ");
 		sb.append(id + " || ");
+		sb.append("pw = ");
+		sb.append(pw + " || ");
 		sb.append("나이 = ");
 		sb.append(age + " || ");
 		sb.append("성별 = ");
@@ -70,9 +76,9 @@ public class CustomerMain{
 	}
 
 	// customerMainMenu 시작(Shopping Main클래스에서 처음 호출받는 메소드)
-	public void customerMenu() {
+	public void customerMenu() throws IOException {
 		// customerService 클래스에서 입력 내용구현
-		ShoppingMain restart = new ShoppingMain();
+		Main restart = new Main();
 		CustomerService customerService = new CustomerService();
 
 		while (true) {

@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class ProductMain{
+public class ShoppingSurvice{
 	
 	private String productId;	//제품ID
 	private String productName;		//제품이름
@@ -16,9 +16,9 @@ public class ProductMain{
 	/*
 	 * 	///////////////생성자/////////////
 	 */
-	ProductMain(){}
+	ShoppingSurvice(){}
 	
-	public ProductMain(String productId, String productName, String category, int price, int quantity) {
+	public ShoppingSurvice(String productId, String productName, String category, int price, int quantity) {
 		super();
 		this.productId = productId;
 		this.productName = productName;

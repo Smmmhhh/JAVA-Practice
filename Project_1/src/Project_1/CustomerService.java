@@ -24,7 +24,9 @@ public class CustomerService {
 			insert();
 			return;
 		}
-
+		// pw 입력받기
+		System.out.println("비밀번호를 입력하세요. ");
+		String pw = sc.next();
 		// 이름 입력받기
 		System.out.println("이름을 입력하세요. ");
 		String name = sc.next();
@@ -47,7 +49,7 @@ public class CustomerService {
 		
 
 		// 입력받은 값 저장
-		CustomerMain customermain = new CustomerMain(id, name, age, gender, address, phonenumber);
+		CustomerMain customermain = new CustomerMain(id, pw, name, age, gender, address, phonenumber);
 
 		list.add(customermain);
 		hashmap.put(id, customermain);
@@ -67,7 +69,7 @@ public class CustomerService {
 			int index = list.indexOf(customermain);
 			
 			System.out.println("수정하실 항목을 선택하세요.");
-			System.out.println("1.이름 2.나이 3.성별 4.주소 5.번호");
+			System.out.println("1.이름 2.나이 3.성별 4.주소 5. 휴대폰번호 6. 비밀번호");
 			int n = sc.nextInt();
 			
 			switch (n) {
@@ -103,13 +105,21 @@ public class CustomerService {
 				
 				break;
 			case 5:
-				System.out.println("번호을 새로 입력하세요.");
+				System.out.println("휴대폰 번호을 새로 입력하세요.");
 				String phonenumber = sc.next();
 				customermain.setPhoneNumber(phonenumber);
 				
 				list.get(index).setPhoneNumber(phonenumber);
 				
 				break;
+				
+			case 6:
+				System.out.println("비밀번호을 새로 입력하세요.");
+				String pw = sc.next();
+				customermain.setPhoneNumber(pw);
+				list.get(index).setPhoneNumber(pw);
+				break;
+				
 			default:
 				System.out.println("잘못된 입력입니다.");
 				break;
@@ -180,7 +190,7 @@ public class CustomerService {
 			writer = new BufferedWriter(new FileWriter(path, Charset.forName("UTF-8"), true));
 			for (CustomerMain customer : list) {
 				String str;
-				str = customer.getId() + "," + customer.getName() + "," + customer.getAge() + "," + customer.getGender()
+				str = customer.getId() + "," + customer.getPw() + "," + customer.getName() + "," + customer.getAge() + "," + customer.getGender()
 						+ "," + customer.getPhoneNumber() + "," + customer.getAddress();
 				writer.append(str);
 			}
