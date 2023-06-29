@@ -26,6 +26,8 @@ public class ProductMain{
 		this.price = price;
 		this.quantity = quantity;
 	}
+	
+
 
 ////////////////////생성자 완료/////////////////////////////
       
@@ -48,7 +50,7 @@ public class ProductMain{
 	 *  //////////////getter & setter 완료//////////////
 	 */
 	
-	public void ProductList() {
+	public void ProductString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(productName + " ");
 		sb.append("제품" + " || ");
@@ -69,8 +71,7 @@ public class ProductMain{
 		Scanner sc = new Scanner(System.in);
 		Main restart = new Main();
 		ProductService productService = new ProductService();
-		
-		productService.Fileread();	// 파일읽기
+		productService.Fileread();
 		
 		while (true) {
 			System.out.println("-----------------------");
@@ -102,10 +103,8 @@ public class ProductMain{
 			case 5:
 				productService.view(); // 5. 제품 전체조회
 				break;
-			case 6:
-				productService.exit(); // 6. 종료
-				break;
 			case 0:
+				productService.FileSava(); // 6. 종료(파일저장기능)
 				restart.start(); // 0. 초기화면 돌아가기
 				break;
 			default:

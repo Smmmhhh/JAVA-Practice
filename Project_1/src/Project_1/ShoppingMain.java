@@ -1,85 +1,126 @@
 package Project_1;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class ShoppingMain{
 	
-	private String productId;	//제품ID
-	private String productName;		//제품이름
-	private String category;		//카테고리
-	private int price;				//가격
-	private int quantity;			//수량
+	private int productOrderNo;	//제품 주문번호
+	private String userID;		//UID
+	private String productID;	//PID
+	private String date;		//날짜
+	private int quantity;		//수량
+	private int price;			//가격
+	private int totapPrice;		//총액
 	
 	/*
 	 * 	///////////////생성자/////////////
 	 */
-	ShoppingMain(){}
 	
-	public ShoppingMain(String productId, String productName, String category, int price, int quantity) {
+	public ShoppingMain() {}
+	
+	public ShoppingMain(int productOrderNo, String userID, String productID, 
+			String date, int quantity, int price,int totapPrice) {
 		super();
-		this.productId = productId;
-		this.productName = productName;
-		this.category = category;
-		this.price = price;
+		this.productOrderNo = productOrderNo;
+		this.userID = userID;
+		this.productID = productID;
+		this.date = date;
 		this.quantity = quantity;
+		this.price = price;
+		this.totapPrice = totapPrice;
 	}
 
 ////////////////////생성자 완료/////////////////////////////
-      
 	
 	/*
 	 *  //////////////getter & setter 시작//////////////
 	 */
-	public String getProductId() {return productId;}
-	public void setProductId(String productId) {this.productId = productId;}
-	public String getProductName() {return productName;}
-	public void setProductName(String productName) {this.productName = productName;}
-	public String getCategory() {return category;}
-	public void setCategory(String category) {this.category = category;}
+	public int getProductOrderNo() {return productOrderNo;}
+	public void setProductOrderNo(int productOrderNo) {this.productOrderNo = productOrderNo;}
+	public String getUserID() {return userID;}
+	public void setUserID(String userID) {this.userID = userID;}
+	public String getProductID() {return productID;}
+	public void setProductID(String productID) {this.productID = productID;}
+	public String getDate() {return date;}
+	public void setDate(String date) {this.date = date;}
+	public int getQuantity() {return quantity;}
+	public void setQuantity(int quantity) {this.quantity = quantity;}
 	public int getPrice() {return price;}
 	public void setPrice(int price) {this.price = price;}
-	public int getQuantity() {return quantity;}
-	public void setQuantity(int quantity) {this.quantity = quantity;}	
+	public int getTotapPrice() {return totapPrice;}
+	public void setTotapPrice(int totapPrice) {this.totapPrice = totapPrice;}
 	
 	/*
 	 *  //////////////getter & setter 완료//////////////
 	 */
 	
-	public void ProductList() {
+	public void shoppingString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(productName + " ");
-		sb.append("제품" + " || ");
+		sb.append("주문번호" + " || ");
+		sb.append(productOrderNo + " ");
+		sb.append("유저ID = ");
+		sb.append(userID + " || ");
 		sb.append("제품ID = ");
-		sb.append(productId + " || ");
-		sb.append("카테고리 = ");
-		sb.append(category + " || ");
+		sb.append(productID + " || ");
+		sb.append("날짜 = ");
+		sb.append(date + " || ");
+		sb.append("수량 = ");
+		sb.append(quantity + " || ");
 		sb.append("가격 = ");
 		sb.append(price + " || ");
-		sb.append("수량 = ");
-		sb.append(quantity);
+		sb.append("총액 = ");
+		sb.append(totapPrice);
 		System.out.println(sb);
+	}
+	
+	public void Login() throws IOException {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("쇼핑몰 로그인");
+		
+		// Customer & Product 객체생성 파일리스트 값 받아오기
+		CustomerService customerService = new CustomerService();
+		ProductService productService = new ProductService();
+		customerService.Fileread();
+		productService.Fileread();
+		
+		// 사용자 id, pw 입력받고 고객 id 및 비밀번호 확인
+		System.out.println("ID 입력하세요 = ");
+		String id = sc.next();
+		System.out.println("PW 입력하세요 = ");
+		String pw = sc.next();
+		String findFw = null;
+		
+		if(customerService.customerHash.containsKey(id)) {
+			findFw = customerService.customerHash.get(id).getPw();
+		}else {
+			System.out.println("로그인 실패");
+			return ;
+		}
+		
+		if(findFw.equals(pw)) {
+			System.out.println("로그인 성공!");
+			ShoppingMenu();
+		}else {
+			System.out.println("로그인 실패");
+			Login();
+			return ;
+		}
 	}
 
 	// ProductMainMenu 시작(Shopping Main클래스에서 처음 호출받는 메소드)
-	public void ProductMenu() throws IOException {
-		// customerService 클래스에서 입력 내용구현
+	public void ShoppingMenu() throws IOException {	
+		// ShoppingMenu Page List
 		Scanner sc = new Scanner(System.in);
 		Main restart = new Main();
-		ProductService productService = new ProductService();
-		
-		productService.Fileread();	// 파일읽기
+		ShoppingService shoppingService = new ShoppingService();
 		
 		while (true) {
 			System.out.println("-----------------------");
-			System.out.println("1.제품등록");
-			System.out.println("2.제품수정");
-			System.out.println("3.제품삭제");
-			System.out.println("4.단일 제품조회");
-			System.out.println("5.제품 전체조회");
-			System.out.println("6.종료");
+			System.out.println("1. 제품구메");
+			System.out.println("2.환불");
+//			System.out.println("3.단일 제품조회");
+//			System.out.println("4.제품 전체조회");
 			System.out.println("0.메인 메뉴로 돌아가기");
 			System.out.println("-----------------------");
 			// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
@@ -87,25 +128,23 @@ public class ShoppingMain{
 
 			switch (menu) {
 			case 1:
-				productService.insert(); // 1. 구매하기 
+				shoppingService.productBuy(); // 1. 구매하기 
 				break;
 			case 2: {
-				productService.edit(); // 2. 환불하기 
+				shoppingService.productRefund(); // 2. 환불하기 
 				break;
 			}
 			case 3:
-				productService.delete(); // 3. 제품삭제
+//				shoppingService.delete(); // 3.
 				break;
 			case 4:
-				productService.SingleView(); // 4. 단일제품 조회
+//				shoppingService.SingleView(); // 4.
 				break;
 			case 5:
-				productService.view(); // 5. 제품 전체조회
-				break;
-			case 6:
-				productService.exit(); // 6. 종료
+//				shoppingService.view(); // 5.
 				break;
 			case 0:
+//				shoppingService.FileSave(); // 6. 종료
 				restart.start(); // 0. 초기화면 돌아가기
 				break;
 			default:

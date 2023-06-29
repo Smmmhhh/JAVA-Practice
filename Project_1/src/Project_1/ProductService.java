@@ -119,7 +119,7 @@ public class ProductService {
 		String productId = sc.next();
 		// 입력된 제품 출력
 		if (productHash.containsKey(productId)) {
-			productHash.get(productId).ProductList(); // ✔✔get이 뭔지 이해하자
+			productHash.get(productId).ProductString(); // ✔✔get이 뭔지 이해하자
 		} else
 			System.out.println("해당 제품은 없습니다.");
 	}
@@ -130,7 +130,7 @@ public class ProductService {
 		System.out.println("---등록된 제품을 모두 출력합니다.---");
 		if (!list.isEmpty()) {
 			for (ProductMain productMain : list) {
-				productMain.ProductList();
+				productMain.ProductString();
 			}
 			// 리스트가 비어있으면 view 메소드 종료
 		} else if (list.isEmpty()) {
@@ -140,7 +140,7 @@ public class ProductService {
 	}
 
 	// 종료
-	public void exit() {
+	public void FileSava() {
 		// 1. 파일 객체생성
 		String path = "product.txt";
 		File file = new File(path);
@@ -155,6 +155,11 @@ public class ProductService {
 			FileWriter fileWriter = new FileWriter(file, false);	//false = 덮어쓰기 , write = 기존꺼 밑에 쓰기
 			BufferedWriter writer = new BufferedWriter(fileWriter);
 
+//			String str = "productName" + "," + e.getProductName() + "," + e.getCategory() + "," + e.getPrice()
+//			+ "," + e.getQuantity();
+//			writer.append(str + "\n");
+			
+			
 			// 4. 입력된 arraylist값 "," 붙여서 메모장 생성
 			for (ProductMain e : list) {
 				String str = e.getProductId() + "," + e.getProductName() + "," + e.getCategory() + "," + e.getPrice()
