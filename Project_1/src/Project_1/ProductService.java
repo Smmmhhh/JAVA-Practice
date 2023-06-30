@@ -140,7 +140,7 @@ public class ProductService {
 	}
 
 	// 종료
-	public void FileSava() {
+	public void FileSave() {
 		// 1. 파일 객체생성
 		String path = "product.txt";
 		File file = new File(path);

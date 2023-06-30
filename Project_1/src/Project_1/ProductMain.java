@@ -104,7 +104,7 @@ public class ProductMain{
 				productService.view(); // 5. 제품 전체조회
 				break;
 			case 0:
-				productService.FileSava(); // 6. 종료(파일저장기능)
+				productService.FileSave(); // 6. 종료(파일저장기능)
 				restart.start(); // 0. 초기화면 돌아가기
 				break;
 			default:

@@ -153,7 +153,7 @@ public class CustomerMain {
 				customerService.view(); // 5. 전체 고객 조회
 				break;
 			case 0:
-				customerService.FileSava(); // 6. 종료
+				customerService.FileSave(); // 6. 종료
 				restart.start(); // 0. 초기화면 돌아가기
 				break;
 			default:

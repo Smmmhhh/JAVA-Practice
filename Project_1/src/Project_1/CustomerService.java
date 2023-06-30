@@ -174,7 +174,7 @@ public class CustomerService {
 	}
 
 	// csv에 저장
-	public void FileSava() {
+	public void FileSave() {
 		String path = "customer.txt";
 		File file = new File(path);
 		BufferedWriter writer = null;

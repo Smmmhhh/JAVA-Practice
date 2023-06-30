@@ -13,6 +13,8 @@ public class ShoppingMain{
 	private int price;			//가격
 	private int totapPrice;		//총액
 	
+	private String inputId;
+	
 	/*
 	 * 	///////////////생성자/////////////
 	 */
@@ -57,7 +59,7 @@ public class ShoppingMain{
 	
 	public void shoppingString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("주문번호" + " || ");
+		sb.append("주문번호 ");
 		sb.append(productOrderNo + " ");
 		sb.append("유저ID = ");
 		sb.append(userID + " || ");
@@ -74,37 +76,39 @@ public class ShoppingMain{
 		System.out.println(sb);
 	}
 	
+	
 	public void Login() throws IOException {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("쇼핑몰 로그인");
-		
+		System.out.println("---쇼핑몰 로그인---");
 		// Customer & Product 객체생성 파일리스트 값 받아오기
 		CustomerService customerService = new CustomerService();
 		ProductService productService = new ProductService();
 		customerService.Fileread();
 		productService.Fileread();
-		
 		// 사용자 id, pw 입력받고 고객 id 및 비밀번호 확인
 		System.out.println("ID 입력하세요 = ");
-		String id = sc.next();
-		System.out.println("PW 입력하세요 = ");
-		String pw = sc.next();
+		inputId = sc.next();
 		String findFw = null;
 		
-		if(customerService.customerHash.containsKey(id)) {
-			findFw = customerService.customerHash.get(id).getPw();
-		}else {
+		//고객정보 클래스의 아이디 정보 확인
+		if(customerService.customerHash.containsKey(inputId)) {
+			findFw = customerService.customerHash.get(inputId).getPw();
+		}else if(!customerService.customerHash.containsKey(inputId)){
 			System.out.println("로그인 실패");
-			return ;
+			Login();
+			return;
 		}
-		
+		// 패스워드 확인
+		System.out.println("PW 입력하세요 = ");
+		String pw = sc.next();
 		if(findFw.equals(pw)) {
 			System.out.println("로그인 성공!");
 			ShoppingMenu();
+			
 		}else {
 			System.out.println("로그인 실패");
 			Login();
-			return ;
+			return;
 		}
 	}
 
@@ -114,28 +118,29 @@ public class ShoppingMain{
 		Scanner sc = new Scanner(System.in);
 		Main restart = new Main();
 		ShoppingService shoppingService = new ShoppingService();
+		shoppingService.Fileread();
 		
 		while (true) {
 			System.out.println("-----------------------");
 			System.out.println("1. 제품구메");
-			System.out.println("2.환불");
-//			System.out.println("3.단일 제품조회");
-//			System.out.println("4.제품 전체조회");
-			System.out.println("0.메인 메뉴로 돌아가기");
+			System.out.println("2. 환불");
+			System.out.println("3. 고객 구매리스트 조회");
+//			System.out.println("4. 제품 전체조회");
+			System.out.println("0. 메인 메뉴로 돌아가기");
 			System.out.println("-----------------------");
 			// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
 			int menu = sc.nextInt();
 
 			switch (menu) {
 			case 1:
-				shoppingService.productBuy(); // 1. 구매하기 
+				shoppingService.productBuy(inputId); // 1. 구매하기 
 				break;
 			case 2: {
-				shoppingService.productRefund(); // 2. 환불하기 
+				shoppingService.productRefund(inputId); // 2. 환불하기 
 				break;
 			}
 			case 3:
-//				shoppingService.delete(); // 3.
+				shoppingService.customerBuyList(inputId); // 3. 고객 구매 리스트
 				break;
 			case 4:
 //				shoppingService.SingleView(); // 4.
