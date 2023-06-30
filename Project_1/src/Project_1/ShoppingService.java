@@ -10,7 +10,9 @@ public class ShoppingService {
 	ArrayList<ShoppingMain> shoppingList = new ArrayList<>();
 	HashMap<Integer, ShoppingMain> shoppingHash = new HashMap<>();
 
-	public void productBuy(String id) throws IOException {
+	// 구매하기
+	public void productBuy(String inputId) throws IOException {
+
 		ProductService productService = new ProductService();
 		productService.Fileread();
 
@@ -18,13 +20,13 @@ public class ShoppingService {
 		System.out.println("---제품 목록---");
 		System.out.println("제품ID   제품명   가격   수량");
 
-		if (!productService.list.isEmpty()) {
-			for (ProductMain productMain : productService.list) {
+		if (!productService.productList.isEmpty()) {
+			for (ProductMain productMain : productService.productList) {
 				System.out.println(productMain.getProductId() + " " + productMain.getProductName() + " "
 						+ productMain.getPrice() + " " + productMain.getQuantity());
 			}
 			// 리스트가 비어있으면 view 메소드 종료
-		} else if (productService.list.isEmpty()) {
+		} else if (productService.productList.isEmpty()) {
 			System.out.println("등록된 제품이 없습니다.");
 			return;
 		}
@@ -35,11 +37,23 @@ public class ShoppingService {
 		int orderNo = shoppingList.get(shoppingList.size() - 1).getProductOrderNo() + 1;
 
 		// 주문자 Id 가져오기
-		String uid = id;
+		String uid = inputId;
 
 		// 구매할 제품 ID 입력받기
 		System.out.println("구매하실 제품 ID를 입력해주세요");
 		String pid = sc.next();
+
+		// 입력받은 제품 ID가 목록에 없을때 예외처리
+		if (!(productService.productHash.containsKey(pid))) {
+			System.out.println("잘못된 입력입니다.");
+			productBuy(inputId);
+		}
+
+		// 입력받은 제품 ID의 재고가 0일때
+		if (productService.productHash.get(pid).getQuantity() == 0) {
+			System.out.println("해당 제품의 재고가 없습니다.");
+			return;
+		}
 
 		// 구매할 날짜 생성하기
 		LocalDate now = LocalDate.now();
@@ -49,6 +63,12 @@ public class ShoppingService {
 		// 구매할 수량 입력받기
 		System.out.println("수량을 입력해주세요");
 		int inputQuantity = sc.nextInt();
+
+		// 입력받은 수량이 0일때
+		if (inputQuantity == 0) {
+			System.out.println("수량이 없습니다.");
+			productBuy(inputId);
+		}
 
 		// 가격 productlist에서 가져오기
 		int price = productService.productHash.get(pid).getPrice();
@@ -63,16 +83,15 @@ public class ShoppingService {
 		shoppingHash.put(orderNo, shoppingmain);
 
 		// product의 arraylist와 hashmap 수량 변경
-		int productQuantity = productService.productHash.get(pid).getQuantity(); // productHash에 저장된 pid에 해당하는 수량 가져오기
-		int resultProductQuanity = productQuantity - inputQuantity;
+		int productQuantity = productService.productHash.get(pid).getQuantity(); // productHash에 저장된 pid에 해당하는 재고 가져오기
+		int resultProductQuanity = productQuantity - inputQuantity; // 변경될 재고 계산
 
 		ProductMain productmain = productService.productHash.get(pid);
-		int index = productService.list.indexOf(productmain);
+		int index = productService.productList.indexOf(productmain);
 
-		productService.productHash.get(pid).setQuantity(resultProductQuanity);
-		productService.list.get(index).setQuantity(resultProductQuanity);
-		productService.FileSave();
-
+		productService.productHash.get(pid).setQuantity(resultProductQuanity); // productHash 재고 변경
+		productService.productList.get(index).setQuantity(resultProductQuanity); // productList 재고 변경
+		productService.FileSave(); // product.txt 저장
 	}
 
 	public void productRefund(String inputId) throws IOException {
@@ -98,7 +117,7 @@ public class ShoppingService {
 		}
 		System.out.println("------------------------------");
 		System.out.println("환불할 제품의 주문번호를 입력하세요 = ");
-		int num = sc.nextInt(); 
+		int num = sc.nextInt();
 		// *** 환불할 항목의 값이 구매자의 범위내에 없을 때 or 해쉬맵에 저자되어 있지 않을때 ***//
 		if (!shoppingHash.containsKey(num) || !userId.equals(shoppingHash.get(num).getUserID())) {
 			System.out.println("입력값이 초과되었습니다.");
@@ -155,10 +174,10 @@ public class ShoppingService {
 				}
 				// *** Product Class의 HashMap, ArrayList 값 수정 *** //
 				ProductMain productmain = productService.productHash.get(userId);
-				int index = productService.list.indexOf(productmain);
+				int index = productService.productList.indexOf(productmain);
 
 				productService.productHash.get(userId).setQuantity(editQuantity); // 해쉬맵 값 바꾸기
-				productService.list.get(index).setQuantity(editQuantity); // 리스트 값 바꾸기
+				productService.productList.get(index).setQuantity(editQuantity); // 리스트 값 바꾸기
 				productService.FileSave();
 				System.out.println("------------------------------");
 				System.out.println("환불이 완료되었습니다.");
@@ -187,6 +206,17 @@ public class ShoppingService {
 		if (listCount == 0) {
 			System.out.println("해당 고객은 제품이 없습니다.");
 			return;
+		}
+
+	}
+
+	public void view() {
+		if (shoppingList.size() != 0) {
+			for (ShoppingMain shopping : shoppingList) {
+				shopping.shoppingString();
+			}
+		} else if (shoppingList.size() == 0) {
+			System.out.println("주문 목록이 없습니다.");
 		}
 
 	}

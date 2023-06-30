@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class CustomerMain {
 
+	Scanner sc = new Scanner(System.in);
 	private String id;
 	private String pw;
 	private String name;
@@ -45,11 +46,11 @@ public class CustomerMain {
 	}
 
 	public String getPw() {
-		return id;
+		return pw;
 	}
 
 	public void setPw(String pw) {
-		this.id = pw;
+		this.pw = pw;
 	}
 
 	public String getName() {
@@ -118,11 +119,11 @@ public class CustomerMain {
 	// customerMainMenu 시작(Shopping Main클래스에서 처음 호출받는 메소드)
 	public void customerMenu() throws IOException {
 		// customerService 클래스에서 입력 내용구현
-		Scanner sc = new Scanner(System.in);
 		Main restart = new Main();
 		CustomerService customerService = new CustomerService();
-		customerService.Fileread();
-		
+
+		customerService.Fileread(); // 파일읽기
+
 		while (true) {
 			System.out.println("-----------------------");
 			System.out.println("1.입력");
@@ -155,7 +156,7 @@ public class CustomerMain {
 			case 0:
 				customerService.FileSave(); // 6. 종료
 				restart.start(); // 0. 초기화면 돌아가기
-				break;
+				return;
 			default:
 				System.out.println("잘못된 입력입니다.");
 			}

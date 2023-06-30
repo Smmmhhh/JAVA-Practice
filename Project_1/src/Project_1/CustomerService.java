@@ -8,7 +8,7 @@ import java.util.*;
 
 public class CustomerService {
 
-	ArrayList<CustomerMain> list = new ArrayList<>();
+	ArrayList<CustomerMain> customerList = new ArrayList<>();
 	HashMap<String, CustomerMain> customerHash = new HashMap<String, CustomerMain>();
 
 	Scanner sc = new Scanner(System.in);
@@ -24,7 +24,7 @@ public class CustomerService {
 			insert();
 			return;
 		}
-		// 비밀번호 입력받기
+		// pw 입력받기
 		System.out.println("비밀번호를 입력하세요. ");
 		String pw = sc.next();
 		// 이름 입력받기
@@ -50,7 +50,7 @@ public class CustomerService {
 		// 입력받은 값 저장
 		CustomerMain customermain = new CustomerMain(id, pw, name, age, gender, address, phonenumber);
 
-		list.add(customermain);
+		customerList.add(customermain);
 		customerHash.put(id, customermain);
 	}
 
@@ -64,10 +64,10 @@ public class CustomerService {
 			// 고객 메인 = 해쉬맵에서 입력받은 id의 값을 넣어준다 hashmap.get(id) = 주소값 반환
 			CustomerMain customermain = customerHash.get(id);
 			// 해쉬맵에서 찾은 값을 리스트indexof에 넣어줘서, 리스트의 값이 위치하는 인덱스 번호를 찾는다.
-			int index = list.indexOf(customermain);
+			int index = customerList.indexOf(customermain);
 
 			System.out.println("수정하실 항목을 선택하세요.");
-			System.out.println("1.이름 2.나이 3.성별 4.주소 5.휴대폰번호 6.비밀번호");
+			System.out.println("1.이름 2.나이 3.성별 4.주소 5. 휴대폰번호 6. 비밀번호");
 			int n = sc.nextInt();
 
 			switch (n) {
@@ -75,8 +75,7 @@ public class CustomerService {
 				System.out.println("이름을 새로 입력하세요.");
 				String name = sc.next();
 				customermain.setName(name);
-
-				list.get(index).setName(name);
+				customerList.get(index).setName(name);
 
 				break;
 			case 2:
@@ -84,7 +83,7 @@ public class CustomerService {
 				int age = sc.nextInt();
 				customermain.setAge(age);
 
-				list.get(index).setAge(age);
+				customerList.get(index).setAge(age);
 
 				break;
 			case 3:
@@ -92,7 +91,7 @@ public class CustomerService {
 				String gender = sc.next();
 				customermain.setGender(gender);
 
-				list.get(index).setGender(gender);
+				customerList.get(index).setGender(gender);
 
 				break;
 			case 4:
@@ -100,27 +99,25 @@ public class CustomerService {
 				String address = sc.next();
 				customermain.setAddress(address);
 
-				list.get(index).setAddress(address);
+				customerList.get(index).setAddress(address);
 
 				break;
 			case 5:
-				System.out.println("번호을 새로 입력하세요.");
+				System.out.println("휴대폰 번호을 새로 입력하세요.");
 				String phonenumber = sc.next();
 				customermain.setPhoneNumber(phonenumber);
 
-				list.get(index).setPhoneNumber(phonenumber);
+				customerList.get(index).setPhoneNumber(phonenumber);
 
 				break;
-				
+
 			case 6:
-				System.out.println("번호을 새로 입력하세요.");
+				System.out.println("비밀번호을 새로 입력하세요.");
 				String pw = sc.next();
 				customermain.setPhoneNumber(pw);
-
-				list.get(index).setPhoneNumber(pw);
-
+				customerList.get(index).setPhoneNumber(pw);
 				break;
-				
+
 			default:
 				System.out.println("잘못된 입력입니다.");
 				break;
@@ -139,10 +136,10 @@ public class CustomerService {
 
 		if (customerHash.containsKey(id)) {
 			CustomerMain customermain = customerHash.get(id);
-			int index = list.indexOf(customermain);
+			int index = customerList.indexOf(customermain);
 
 			customerHash.remove(id);
-			list.remove(index);
+			customerList.remove(index);
 		} else {
 			System.out.println("입력하신 회원님은 없습니다.");
 		}
@@ -163,11 +160,11 @@ public class CustomerService {
 
 	// 전체 고객 정보 출력
 	public void view() {
-		if (list.size() != 0) {
-			for (CustomerMain customer : list) {
+		if (customerList.size() != 0) {
+			for (CustomerMain customer : customerList) {
 				customer.customerString();
 			}
-		} else if (list.size() == 0) {
+		} else if (customerList.size() == 0) {
 			System.out.println("회원 목록이 없습니다.");
 		}
 
@@ -185,10 +182,10 @@ public class CustomerService {
 				System.out.println("File already exists.");
 			}
 			writer = new BufferedWriter(new FileWriter(path, false));
-			for (CustomerMain customer : list) {
+			for (CustomerMain customer : customerList) {
 				String str;
-				str = customer.getId() + "," + customer.getPw() + "," + customer.getName() + "," + customer.getAge() + "," + customer.getGender()
-						+ "," + customer.getPhoneNumber() + "," + customer.getAddress();
+				str = customer.getId() + "," + customer.getPw() + "," + customer.getName() + "," + customer.getAge()
+						+ "," + customer.getGender() + "," + customer.getAddress() + "," + customer.getPhoneNumber();
 				writer.append(str);
 				writer.append("\n");
 			}
@@ -217,7 +214,7 @@ public class CustomerService {
 				String phonenumber = data[6];
 
 				CustomerMain customermain = new CustomerMain(id, pw, name, age, gender, address, phonenumber);
-				list.add(customermain);
+				customerList.add(customermain);
 				customerHash.put(id, customermain);
 			}
 

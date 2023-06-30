@@ -125,8 +125,8 @@ public class ShoppingMain{
 			System.out.println("1. 제품구메");
 			System.out.println("2. 환불");
 			System.out.println("3. 고객 구매리스트 조회");
-//			System.out.println("4. 제품 전체조회");
 			System.out.println("0. 메인 메뉴로 돌아가기");
+			System.out.println("99. 주문목록 전체조회");
 			System.out.println("-----------------------");
 			// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
 			int menu = sc.nextInt();
@@ -145,13 +145,12 @@ public class ShoppingMain{
 			case 4:
 //				shoppingService.SingleView(); // 4.
 				break;
-			case 5:
-//				shoppingService.view(); // 5.
+			case 99:
+				shoppingService.view();
 				break;
 			case 0:
-//				shoppingService.FileSave(); // 6. 종료
 				restart.start(); // 0. 초기화면 돌아가기
-				break;
+				return;
 			default:
 				System.out.println("잘못된 입력입니다.");
 			}
