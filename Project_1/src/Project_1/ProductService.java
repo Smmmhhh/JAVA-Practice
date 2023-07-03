@@ -15,8 +15,6 @@ public class ProductService {
 		String productId = null, productName = null, category = null;
 		int price = 0, quantity = 0;
 
-		isStempNo++; // stempNo=1
-
 		// *** Step1 = 제품 ID 입력받기 ***//
 		if (isStempNo == 1) {
 			System.out.println("==========제품 정보를 입력합니다==========");
@@ -88,7 +86,6 @@ public class ProductService {
 		int edStempNo = stepNo; // stepNo
 		String productId = null;
 		int n = 0, index = 0;
-		edStempNo++; // stepNo=1
 
 		// ***step1=수정할 제품id 입력받기 ***//
 		if (edStempNo == 1) {
@@ -124,25 +121,22 @@ public class ProductService {
 		}
 		// *** step3 HashMap, ArrayList indexNo 찾기 && 값 수정 ***//
 		if (edStempNo == 3) {
-			// 고객 메인 = 해쉬맵에서 입력받은 id의 값을 넣어준다 productHash.get(id) = 주소값 반환
+			// 1. productMain = productHash.get(id)의 주소값을 참조 저장
+			// 2. productMain.set필드변수 를 해주면 HashMap과 ArrayList는 같은 productMain을 참조해서 값이 바뀐다.
 			ProductMain productMain = productHash.get(productId);
-			// 해쉬맵에서 찾은 값을 리스트indexof에 넣어줘서, 리스트의 값이 위치하는 인덱스 번호를 찾는다.
-			index = productList.indexOf(productMain);
 
 			switch (n) {
 			case 1:
 				System.out.println("제품명을 새로 입력하세요 =");
 				String productName = sc.next();
-				// 해쉬맵 값 바꾸기 // productMain은 productHash.get(productId) 값의 주소를 받았다.
+				// productMain은 productHash.get(productId) 값의 주소를 받았다.
 				// 그러므로 setProductName 을 해주면 해당값을 바꿀수있다.
-				productMain.setProductName(productName); // 해쉬맵 값 바꾸기
-				productList.get(index).setProductName(productName); // 리스트 값 바꾸기
+				productMain.setProductName(productName); //값 변경 
 				break;
 			case 2:
 				System.out.println("카테고리를 새로 입력하세요 =");
 				String category = sc.next();
 				productMain.setProductName(category);
-				productList.get(index).setCategory(category);
 				break;
 			case 3:
 				System.out.println("가격을 새로 입력하세요 =");
@@ -150,7 +144,6 @@ public class ProductService {
 					try {
 						int price = sc.nextInt();
 						productMain.setPrice(price);
-						productList.get(index).setPrice(price);
 						break;
 					} catch (Exception e) {
 						sc.nextLine();
@@ -164,7 +157,6 @@ public class ProductService {
 						System.out.println("수량을 새로 입력하세요. = ");
 						int quantity = sc.nextInt();
 						productMain.setPrice(quantity);
-						productList.get(index).setQuantity(quantity);
 						break;
 					} catch (Exception e) {
 						sc.nextLine();
@@ -184,7 +176,7 @@ public class ProductService {
 	public void delete(int stepNo) {
 		int deStepNo = stepNo;
 		String productId = null;
-		deStepNo++;
+
 		// *** step1 제품 id 입력받기 *** //
 		if (deStepNo == 1) {
 			System.out.println("==========제품을 삭제합니다.==========");
@@ -211,7 +203,7 @@ public class ProductService {
 	public void SingleView(int stepNo) {
 		int svStepNo = stepNo;
 		String productId = null;
-		svStepNo++;
+
 		// *** step1 제품 id 입력받기 *** //
 		if (svStepNo == 1) {
 			System.out.println("==========단일 제품을 출력합니다.==========");
@@ -233,7 +225,7 @@ public class ProductService {
 	// *** All Product List View Method *** //
 	public void view(int stepNo) {
 		int vStepNo = stepNo;
-		vStepNo++;
+
 		// step1 제품 전부 출력
 		if (vStepNo == 1) {
 			// 리스트가 비어있지 않으면 등록된 제품 출력

@@ -3,6 +3,7 @@ package Project_1;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CustomerMain {
@@ -98,22 +99,8 @@ public class CustomerMain {
 	 */
 
 	public void customerString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(name + " ");
-		sb.append("회원" + " || ");
-		sb.append("id = ");
-		sb.append(id + " || ");
-		sb.append("pw = ");
-		sb.append(pw + " || ");
-		sb.append("나이 = ");
-		sb.append(age + " || ");
-		sb.append("성별 = ");
-		sb.append(gender + " || ");
-		sb.append("주소 = ");
-		sb.append(address + " || ");
-		sb.append("핸드폰번호 = ");
-		sb.append(phoneNumber);
-		System.out.println(sb);
+
+		System.out.printf("%-10s%-10s%-10s%-10d%-10s%-20s%-11s%n", name, id, pw, age, gender, address, phoneNumber);
 	}
 
 	// customerMainMenu 시작(Shopping Main클래스에서 처음 호출받는 메소드)
@@ -124,34 +111,52 @@ public class CustomerMain {
 
 		customerService.Fileread(); // 파일읽기
 
+		int stepNo = 1;
+
 		while (true) {
-			System.out.println("-----------------------");
+			System.out.println("==========고객관리 메인화면입니다==========");
 			System.out.println("1.입력");
 			System.out.println("2.수정");
 			System.out.println("3.삭제");
 			System.out.println("4.조회");
 			System.out.println("5.전체조회");
 			System.out.println("0.메인 메뉴로 돌아가기");
-			System.out.println("-----------------------");
+			System.out.println("====================================");
 			// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
-			int menu = sc.nextInt();
+
+			int menu = 0;
+
+			while (true) {
+				try {
+					menu = sc.nextInt();
+
+					if (menu >= 0 && menu <= 5) {
+						break;
+					} else {
+						System.out.println("[ERROR] 0부터 6까지의 숫자를 입력해주세요.");
+					}
+				} catch (InputMismatchException e) {
+					System.out.println("[ERROR] 숫자를 입력해주세요.");
+					sc.nextLine(); // 스트링 버퍼를 비움 -> 잘못된 입력이 남아있는 경우 반복적인 예외 발생 방지
+				}
+			}
 
 			switch (menu) {
 			case 1:
-				customerService.insert(); // 1. 입력
+				customerService.insert(stepNo); // 1. 입력
 				break;
 			case 2: {
-				customerService.edit(); // 2. 수정
+				customerService.edit(stepNo); // 2. 수정
 				break;
 			}
 			case 3:
-				customerService.delete(); // 3. 삭제
+				customerService.delete(stepNo); // 3. 삭제
 				break;
 			case 4:
-				customerService.personalView(); // 4. 개인별 조회
+				customerService.personalView(stepNo); // 4. 개인별 조회
 				break;
 			case 5:
-				customerService.view(); // 5. 전체 고객 조회
+				customerService.view(stepNo); // 5. 전체 고객 조회
 				break;
 			case 0:
 				customerService.FileSave(); // 6. 종료

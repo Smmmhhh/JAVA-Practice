@@ -1,6 +1,7 @@
 package Project_1;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ShoppingMain{
@@ -15,10 +16,7 @@ public class ShoppingMain{
 	
 	private String inputId;
 	
-	/*
-	 * 	///////////////생성자/////////////
-	 */
-	
+	// *** 생성자 *** //
 	public ShoppingMain() {}
 	
 	public ShoppingMain(int productOrderNo, String userID, String productID, 
@@ -33,11 +31,8 @@ public class ShoppingMain{
 		this.totapPrice = totapPrice;
 	}
 
-////////////////////생성자 완료/////////////////////////////
 	
-	/*
-	 *  //////////////getter & setter 시작//////////////
-	 */
+	// *** getter & setter *** //
 	public int getProductOrderNo() {return productOrderNo;}
 	public void setProductOrderNo(int productOrderNo) {this.productOrderNo = productOrderNo;}
 	public String getUserID() {return userID;}
@@ -53,10 +48,7 @@ public class ShoppingMain{
 	public int getTotapPrice() {return totapPrice;}
 	public void setTotapPrice(int totapPrice) {this.totapPrice = totapPrice;}
 	
-	/*
-	 *  //////////////getter & setter 완료//////////////
-	 */
-	
+	/// *** shoppingString Method *** //
 	public void shoppingString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("주문번호 ");
@@ -76,7 +68,7 @@ public class ShoppingMain{
 		System.out.println(sb);
 	}
 	
-	
+	/// *** Login Method *** //
 	public void Login() throws IOException {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("---쇼핑몰 로그인---");
@@ -112,47 +104,58 @@ public class ShoppingMain{
 		}
 	}
 
-	// ProductMainMenu 시작(Shopping Main클래스에서 처음 호출받는 메소드)
+	/// *** ShoppingMenu Method *** //
 	public void ShoppingMenu() throws IOException {	
 		// ShoppingMenu Page List
 		Scanner sc = new Scanner(System.in);
 		Main restart = new Main();
 		ShoppingService shoppingService = new ShoppingService();
 		shoppingService.Fileread();
-		
+		int menu = 0;
+		int stepNo = 1;
+		// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
 		while (true) {
 			System.out.println("-----------------------");
 			System.out.println("1. 제품구메");
 			System.out.println("2. 환불");
 			System.out.println("3. 고객 구매리스트 조회");
+			System.out.println("4. 주문목록 전체조회");
 			System.out.println("0. 메인 메뉴로 돌아가기");
-			System.out.println("99. 주문목록 전체조회");
 			System.out.println("-----------------------");
-			// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
-			int menu = sc.nextInt();
-
+			
+			while (true) {
+				try {
+					menu = sc.nextInt();
+					if (menu >= 0 && menu <= 5) {
+						break;
+					} else {
+						System.out.println("[ERROR] 0부터 4까지의 숫자를 입력해주세요.");
+					}
+				} catch (InputMismatchException e) {
+					System.out.println("[ERROR] 숫자를 입력해주세요.");
+					sc.nextLine(); // 스트링 버퍼를 비움 -> 잘못된 입력이 남아있는 경우 반복적인 예외 발생 방지
+				}
+			}
 			switch (menu) {
 			case 1:
 				shoppingService.productBuy(inputId); // 1. 구매하기 
 				break;
 			case 2: {
-				shoppingService.productRefund(inputId); // 2. 환불하기 
+				shoppingService.productRefund(inputId, stepNo); // 2. 환불하기 
 				break;
 			}
 			case 3:
 				shoppingService.customerBuyList(inputId); // 3. 고객 구매 리스트
 				break;
 			case 4:
-//				shoppingService.SingleView(); // 4.
-				break;
-			case 99:
-				shoppingService.view();
+				shoppingService.view();	//4. 주문목록 조회
 				break;
 			case 0:
+				shoppingService.FileSave();
 				restart.start(); // 0. 초기화면 돌아가기
 				return;
 			default:
-				System.out.println("잘못된 입력입니다.");
+				return;
 			}
 		}
 	}

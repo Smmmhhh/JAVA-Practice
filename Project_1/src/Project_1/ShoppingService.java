@@ -94,94 +94,154 @@ public class ShoppingService {
 		productService.FileSave(); // product.txt 저장
 	}
 
-	public void productRefund(String inputId) throws IOException {
-
-		// *** 고객 정보, 제품정보 파일로 받아와서 ShoppingList에 넣어주기 ***//
+	// *** productRefund Method *** //
+	public void productRefund(String inputId, int stepNo) throws IOException {
+		int rfStepNo = stepNo;
 		String userId = inputId;
+		// *** 고객 정보, 제품정보 파일로 받아와서 ShoppingList에 넣기 ***//
 		ProductService productService = new ProductService();
 		productService.Fileread();
+		boolean result = true;
+		boolean result2 = true;
+		int num = 0;
+		int refundCount = 0;
+		int editQuantity = 0;
+		int editPrice = 0;
+		int index = 0;
+		String pid = null;
 
-		int listCount = 0;
-		// *** 고객이 제품을 가지고 있는지 판단하고 고객의 구매리스트 출력 ***//
-		for (ShoppingMain e : shoppingList) {
-			if (userId.equals(e.getUserID())) {
-				listCount++;
-				if (listCount != 0)
-					e.shoppingString();
+		// *** step1 고객이 제품을 가지고 있는지 확인 후 고객 구매리스트 출력 *** //
+		if (rfStepNo == 1) {
+			for (ShoppingMain e : shoppingList) {
+				if (userId.equals(e.getUserID())) {
+					result = false;
+					if (result)
+						e.shoppingString();
+				}
+			}
+			// *** 고객의 구매리스트가 없을 때 ***//
+			if (result) {
+				System.out.println("[ERROR]" + rfStepNo + "해당 고객은 제품이 없습니다.");
+				return;
+			}
+			rfStepNo++;
+		}
+		// *** step2 환불할 제품의 주문번호 입력받기 *** //
+		if (rfStepNo == 2) {
+			while (true) {
+				try {
+					System.out.println("------------------------------");
+					System.out.println("환불할 제품의 주문번호를 입력하세요 = ");
+					num = sc.nextInt();
+					rfStepNo++;
+					break;
+
+				} catch (Exception e) {
+					System.out.println("[ERROR]" + rfStepNo + "숫자를 입력해주세요");
+				}
 			}
 		}
-		// *** 고객의 구매리스트가 없을 때 ***//
-		if (listCount == 0) {
-			System.out.println("해당 고객은 제품이 없습니다.");
-			return;
-		}
-		System.out.println("------------------------------");
-		System.out.println("환불할 제품의 주문번호를 입력하세요 = ");
-		int num = sc.nextInt();
-		// *** 환불할 항목의 값이 구매자의 범위내에 없을 때 or 해쉬맵에 저자되어 있지 않을때 ***//
-		if (!shoppingHash.containsKey(num) || !userId.equals(shoppingHash.get(num).getUserID())) {
-			System.out.println("입력값이 초과되었습니다.");
-			System.out.println("재입력 해주세요.");
-			System.out.println("------------------------------");
-			productRefund(userId);
-			return;
-		} else {
-			// *** 환불할 값이 선택되면 환불 갯수를 입력받는다. ***//
-			System.out.println("------------------------------");
-			System.out.println("환불 갯수를 입력해주세요.");
-			int refundCount = sc.nextInt();
-			// *** 입력된 수량이 내가 가진 수량을 초과하면 안됨 ***//
-			if (refundCount > shoppingHash.get(num).getQuantity()) {
-				System.out.println("입력값이 수량을 초과했습니다.");
-				System.out.println("재입력 해주세요.");
+		// *** step3 환불할 항목의 값이 구매자의 범위내에 없을 때 or 해쉬맵에 저자되어 있지 않을때 ***//
+		if (rfStepNo == 3) {
+			if (!shoppingHash.containsKey(num) || !userId.equals(shoppingHash.get(num).getUserID())) {
+				System.out.println("[ERROR]" + rfStepNo + "입력값이 초과되었습니다.");
 				System.out.println("------------------------------");
-				productRefund(userId);
+				productRefund(userId, 2);
 				return;
 			} else {
-				// *** 정상적으로 수량을 입력했으면 수량 빼주기 *** //
-				int editQuantity = shoppingHash.get(num).getQuantity() - refundCount;
-				
-				ShoppingMain shoppingMain = shoppingHash.get(num);
-				shoppingMain.setQuantity(editQuantity);
+				pid = shoppingHash.get(num).getProductID();	//shopping해쉬맵의 키값의 제품 키값 가져오기 
+				rfStepNo++;
+			}
+		}
 
-				// *** 수량이 빠진만큼 가격빼주기 *** //
-				int editPrice = shoppingHash.get(num).getTotapPrice()
-						- (refundCount * shoppingHash.get(num).getPrice());
-				shoppingMain.setQuantity(editQuantity);
-				shoppingMain.setTotapPrice(editPrice);
-
-				// *** 수량이 '0'이면 해당 객체 삭제 *** //
-				if (editPrice == 0) {
-					shoppingMain = shoppingHash.get(num);
-					int index = shoppingList.indexOf(shoppingMain);
-					shoppingHash.remove(num);
-					shoppingList.remove(index);
-				}
-
-				// *** 남은 고객 리스트 출력 *** //
-				int count2 = 0;
-				for (ShoppingMain e : shoppingList) {
-					if (userId.equals(e.getUserID())) {
-						count2++;
-						if (count2 != 0)
-							e.shoppingString();
-					}
-				}
-				// *** 환불 후 제품이 안남았을 때 *** //
-				if (count2 == 0) {
+		// *** step4 환불할 값이 선택되면 환불 갯수를 입력받는다. ***//
+		if (rfStepNo == 4) {
+			while (true) {
+				try {
 					System.out.println("------------------------------");
-					System.out.println("환불 후 고객님의 남은 제품이 없습니다.");
-					return;
+					System.out.println("환불 갯수를 입력해주세요.");
+					refundCount = sc.nextInt();
+					rfStepNo++;
+					break;
+				} catch (Exception e) {
+					System.out.println("[ERROR]" + rfStepNo + "숫자를 입력해주세요");
 				}
-				// *** Product Class의 HashMap, ArrayList 값 수정 *** //
-				ProductMain productmain = productService.productHash.get(userId);
-				int index = productService.productList.indexOf(productmain);
+			}
+		}
+		// *** step5 환불할 값이 내가가진 수량을 초과했을 때. ***//
+		if (rfStepNo == 5) {
+			if (refundCount > shoppingHash.get(num).getQuantity()) {
+				System.out.println("[ERROR]" + rfStepNo + "입력값이 수량을 초과했습니다.");
+				System.out.println("------------------------------");
+				productRefund(userId, 4);
+				return;
+			} else {
+				rfStepNo++;
+			}
+				
+		}
+		// *** step6 정상적으로 수량을 입력했으면 수량 및 가격 처리 ***//
+		if (rfStepNo == 6) {
+			// *** 입력된 수량 빼주기 *** //
+			editQuantity = shoppingHash.get(num).getQuantity() - refundCount;
+			ShoppingMain shoppingMain = shoppingHash.get(num);
+			System.out.println(shoppingMain);
+			System.out.println();
+			shoppingMain.setQuantity(editQuantity);	//해쉬맵 수량 변경
+			
+			//int sIndex = shoppingList.indexOf(shoppingMain);
+			//shoppingList.get(sIndex).setQuantity(editQuantity);	//리스트 수량변경
+			
+			// *** 수량이 빠진만큼 가격빼주기 *** //
+			editPrice = shoppingHash.get(num).getTotapPrice() - (refundCount * shoppingHash.get(num).getPrice());
+			shoppingMain.setTotapPrice(editPrice);	//해쉬맵 수량변경
+			//shoppingList.get(sIndex).setTotapPrice(editPrice);
+				
+			// *** 수량이 '0'이면 해당 객체 삭제 *** //
+			if (editPrice == 0) {
+				shoppingMain = shoppingHash.get(num);
+				index = shoppingList.indexOf(shoppingMain);
+				shoppingHash.remove(num);
+				shoppingList.remove(index);
+			}
+			rfStepNo++;
+		}
 
-				productService.productHash.get(userId).setQuantity(editQuantity); // 해쉬맵 값 바꾸기
+		// *** step7 고객의 남은 물품 리스트 출력 *** //
+		if (rfStepNo == 7) {
+			for (ShoppingMain e : shoppingList) {
+				if (userId.equals(e.getUserID())) {
+					result2 = false;
+					if (result2)
+						e.shoppingString();
+				}
+			}
+			rfStepNo++;
+		}
+
+		// *** step8 환불 후 제품이 안남았을 때 *** //
+		if (rfStepNo == 8) {
+			if (result2) {
+				System.out.println("------------------------------");
+				System.out.println("환불 후 고객님의 남은 제품이 없습니다.");
+				return;
+			}
+			rfStepNo++;
+		}
+
+		// *** step9 Product Class의 HashMap, ArrayList 값 수정 *** //
+		if (rfStepNo == 9) {
+			try {
+				ProductMain productmain = productService.productHash.get(pid);
+				index = productService.productList.indexOf(productmain);
+				productService.productHash.get(pid).setQuantity(editQuantity); // 해쉬맵 값 바꾸기
 				productService.productList.get(index).setQuantity(editQuantity); // 리스트 값 바꾸기
 				productService.FileSave();
 				System.out.println("------------------------------");
 				System.out.println("환불이 완료되었습니다.");
+				
+			}catch(Exception e){
+				System.out.println("환불은 완료되었고, 해당 제품은 품절입니다.");
 			}
 
 		}

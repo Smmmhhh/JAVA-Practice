@@ -75,12 +75,13 @@ public class ProductMain {
 
 	// *** ProductMenu Method *** //
 	public void ProductMenu() throws IOException {
-		// customerService 클래스에서 입력 내용구현
+		
 		Scanner sc = new Scanner(System.in);
 		Main restart = new Main();
 		ProductService productService = new ProductService();
-		int stepNo = 0;
 		productService.Fileread(); // 파일읽기
+		int menu = 0;
+		int stepNo = 1;
 
 		while (true) {
 			System.out.println("==========제품 메인화면 입니다.==========");
@@ -92,7 +93,22 @@ public class ProductMain {
 			System.out.println("0.메인 메뉴로 돌아가기");
 			System.out.println("=====================================");
 			// 메뉴 번호 입력받고 번호에 따라 CustomerService 메소드 호출
-			int menu = sc.nextInt();
+			
+			while (true) {
+				try {
+					menu = sc.nextInt();
+					
+					if(menu > 5 || menu < -1) {
+						System.out.println("[ERROR]1~5번을 입력하세요.");
+						
+					}else{
+						break;
+					}
+				} catch (Exception e) {
+					sc.nextLine();
+					System.out.println("[ERROR]숫자를 입력하세요.");
+				}
+			}
 
 			switch (menu) {
 			case 1:
@@ -116,7 +132,7 @@ public class ProductMain {
 				restart.start(); // 0. 초기화면 돌아가기
 				return;
 			default:
-				System.out.println("잘못된 입력입니다.");
+				return;
 			}
 		}
 	}
