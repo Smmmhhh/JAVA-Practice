@@ -99,81 +99,85 @@ public class ProductService {
 		}
 		// ***step2 수정할 항목 선택하기 ***//
 		if (edStempNo == 2) {
-			while (true) {
-				try {
-					System.out.println("수정하실 항목을 선택하세요!");
-					System.out.println("1.제품명 2.카테고리 3.가격 4.수량");
-					n = sc.nextInt();
-					if (n > 4 && n < 1) {
-						System.out.println("[ERROR]1~4번을 입력해주세요.");
-					} else {
-						edStempNo++;
+			// 수정하고자하는 제품의 id가 등록되어 있는지 확인하기
+			if (productHash.containsKey(productId)) {
+				while (true) {
+					try {
+						System.out.println("수정하실 항목을 선택하세요!");
+						System.out.println("1.제품명 2.카테고리 3.가격 4.수량");
+						n = sc.nextInt();
+						if (n > 4 || n < 1) {
+							System.out.println("[ERROR]1~4번을 입력해주세요.");
+						} else {
+							edStempNo++;
+							break;
+						}
+					} catch (Exception e) {
+						sc.nextLine();
+						System.out.println("[ERROR]숫자를 입력해주세요.");
 					}
-					break;
-				} catch (Exception e) {
-					sc.nextLine();
-					System.out.println("[ERROR]숫자를 입력해주세요.");
 				}
-			}
+			}else {
+				System.out.println("[ERROR]등록되지 않은 id입니다.");
+				edit(0);
+				return;
 		}
 		// *** step3 HashMap, ArrayList indexNo 찾기 && 값 수정 ***//
 		if (edStempNo == 3) {
+			// 고객 메인 = 해쉬맵에서 입력받은 id의 값을 넣어준다 productHash.get(id) = 주소값 반환
+			ProductMain productMain = productHash.get(productId);
+			// 해쉬맵에서 찾은 값을 리스트indexof에 넣어줘서, 리스트의 값이 위치하는 인덱스 번호를 찾는다.
+			index = productList.indexOf(productMain);
 
-			// 수정하고자하는 제품의 id가 등록되어 있는지 확인하기
-			if (productHash.containsKey(productId)) {
-				// 고객 메인 = 해쉬맵에서 입력받은 id의 값을 넣어준다 productHash.get(id) = 주소값 반환
-				ProductMain productMain = productHash.get(productId);
-				// 해쉬맵에서 찾은 값을 리스트indexof에 넣어줘서, 리스트의 값이 위치하는 인덱스 번호를 찾는다.
-				index = productList.indexOf(productMain);
-
-				switch (n) {
-				case 1:
-					System.out.println("제품명을 새로 입력하세요 =");
-					String productName = sc.next();
-					// 해쉬맵 값 바꾸기 // productMain은 productHash.get(productId) 값의 주소를 받았다.
-					// 그러므로 setProductName 을 해주면 해당값을 바꿀수있다.
-					productMain.setProductName(productName); // 해쉬맵 값 바꾸기
-					productList.get(index).setProductName(productName); // 리스트 값 바꾸기
-					break;
-				case 2:
-					System.out.println("카테고리를 새로 입력하세요 =");
-					String category = sc.next();
-					productMain.setProductName(category);
-					productList.get(index).setCategory(category);
-					break;
-				case 3:
-					System.out.println("가격을 새로 입력하세요 =");
-					while (true) {
-						try {
-							int price = sc.nextInt();
-							productMain.setPrice(price);
-							productList.get(index).setPrice(price);
-							break;
-						} catch (Exception e) {
-							sc.nextLine();
-							System.out.println("[ERROR]숫자를 입력해주세요.");
-						}
+			switch (n) {
+			case 1:
+				System.out.println("제품명을 새로 입력하세요 =");
+				String productName = sc.next();
+				// 해쉬맵 값 바꾸기 // productMain은 productHash.get(productId) 값의 주소를 받았다.
+				// 그러므로 setProductName 을 해주면 해당값을 바꿀수있다.
+				productMain.setProductName(productName); // 해쉬맵 값 바꾸기
+				productList.get(index).setProductName(productName); // 리스트 값 바꾸기
+				break;
+			case 2:
+				System.out.println("카테고리를 새로 입력하세요 =");
+				String category = sc.next();
+				productMain.setProductName(category);
+				productList.get(index).setCategory(category);
+				break;
+			case 3:
+				System.out.println("가격을 새로 입력하세요 =");
+				while (true) {
+					try {
+						int price = sc.nextInt();
+						productMain.setPrice(price);
+						productList.get(index).setPrice(price);
+						break;
+					} catch (Exception e) {
+						sc.nextLine();
+						System.out.println("[ERROR]숫자를 입력해주세요.");
 					}
-					break;
-				case 4:
-					while (true) {
-						try {
-							System.out.println("수량을 새로 입력하세요. = ");
-							int quantity = sc.nextInt();
-							productMain.setPrice(quantity);
-							productList.get(index).setQuantity(quantity);
-							break;
-						} catch (Exception e) {
-							sc.nextLine();
-							System.out.println("[ERROR]숫자를 입력해주세요.");
-						}
-					}
-				default:
-					break;
 				}
-
+				break;
+			case 4:
+				while (true) {
+					try {
+						System.out.println("수량을 새로 입력하세요. = ");
+						int quantity = sc.nextInt();
+						productMain.setPrice(quantity);
+						productList.get(index).setQuantity(quantity);
+						break;
+					} catch (Exception e) {
+						sc.nextLine();
+						System.out.println("[ERROR]숫자를 입력해주세요.");
+					}
+				}
+			default:
+				break;
 			}
+
 		}
+	}
+
 	}
 
 	// ***Product Delete Method***///
