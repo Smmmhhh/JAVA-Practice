@@ -140,6 +140,7 @@ public class ShoppingService {
 			} else {
 				// *** 정상적으로 수량을 입력했으면 수량 빼주기 *** //
 				int editQuantity = shoppingHash.get(num).getQuantity() - refundCount;
+				
 				ShoppingMain shoppingMain = shoppingHash.get(num);
 				shoppingMain.setQuantity(editQuantity);
 
